@@ -18,8 +18,7 @@ class TrilhaSonora {
       id: json['id'],
       nome: json['nome'],
       imagemUrl: json['imageUrl'],
-      faixas:
-          FaixaMusical.toList((json['faixas'] as List<Map<String, dynamic>>)),
+      faixas: [],
     );
   }
 

@@ -31,6 +31,12 @@ class PocketBaseService {
     }
   }
 
+  Future<List<RecordModel>> getByIds(List<String> ids) async {
+    return pb
+        .collection(collectionModel)
+        .getFullList(query: {'id': 'in', 'ids': ids});
+  }
+
   Future<RecordModel> getById(String id) async {
     return pb.collection(collectionModel).getOne(id);
   }

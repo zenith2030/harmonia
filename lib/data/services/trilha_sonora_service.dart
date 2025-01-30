@@ -1,13 +1,22 @@
+import 'package:harmonia/domain/models/faixa_musical.dart';
 import 'package:harmonia/domain/models/trilha_sonora.dart';
 import '../../shareds/pocketbase_service.dart';
 
 class TrilhaSonoraService {
   final _trilhaService = PocketBaseService('trilha_sonora');
+  final _musicaService = PocketBaseService('musica');
 
   Future<List<TrilhaSonora>> getAll() async {
     try {
       final result = await _trilhaService.getAll();
-      return result.items.map((e) => TrilhaSonora.fromJson(e.data)).toList();
+      return result.items.map((e) {
+        final item = TrilhaSonora.fromJson(e.data);
+        e.data['faixas'].forEach((id) async {
+          final musica = await _musicaService.getById(id);
+          item.faixas.add(FaixaMusical.fromJson(musica.data));
+        });
+        return item;
+      }).toList();
     } catch (e) {
       rethrow;
     }

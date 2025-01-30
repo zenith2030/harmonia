@@ -1,15 +1,15 @@
 class FaixaMusical {
   final String id;
   final String nome;
-  final String streamUrl;
-  final String duracao;
+  final String duration;
+  final String fileUrl;
   final List<Map<FaixaMusicalOptions, dynamic>> options;
 
   FaixaMusical({
     required this.id,
     required this.nome,
-    required this.streamUrl,
-    required this.duracao,
+    required this.fileUrl,
+    required this.duration,
     required this.options,
   });
 
@@ -17,9 +17,9 @@ class FaixaMusical {
     return FaixaMusical(
       id: json['id'],
       nome: json['nome'],
-      streamUrl: json['streamUrl'],
-      duracao: json['duracao'],
-      options: json['options'],
+      fileUrl: json['fileUrl'],
+      duration: json['duration'],
+      options: [],
     );
   }
 
@@ -27,8 +27,8 @@ class FaixaMusical {
     return {
       'id': id,
       'nome': nome,
-      'streamUrl': streamUrl,
-      'duracao': duracao,
+      'fileUrl': fileUrl,
+      'duracao': duration,
       'options': options,
     };
   }
