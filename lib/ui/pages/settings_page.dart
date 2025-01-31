@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
                 leading: Icon(Icons.color_lens),
                 title: Text('Thema'),
                 trailing: IconButton(
-                  icon: Icon(ThemeNotifier.themeMode == Brightness.light
+                  icon: Icon(ThemeNotifier.themeMode() == Brightness.light
                       ? Icons.dark_mode
                       : Icons.light_mode),
                   onPressed: () {
