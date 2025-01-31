@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:harmonia/data/repositories/trilha_sonora_repository.dart';
+import 'package:harmonia/main.dart';
 import 'package:harmonia/ui/widgets/gradient_background.dart';
 import 'package:harmonia/ui/widgets/trilha_sonora_list.dart';
-import 'package:provider/provider.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({
@@ -17,6 +17,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   late Animation<Offset> playerPageAnimation;
   late AnimationController animateController;
   late Animation<Offset> listAnimation;
+  final repository = injector.get<TrilhaSonoraRepository>();
 
   @override
   void initState() {
@@ -43,7 +44,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   bool listEnable = false;
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<TrilhaSonoraRepository>();
     double sizeMiddle = MediaQuery.sizeOf(context).shortestSide * 0.5;
     return Scaffold(
       body: GradientBackground(
