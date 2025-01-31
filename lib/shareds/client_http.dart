@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:harmonia/domain/models/user.dart';
 import 'package:harmonia/shareds/errors/http_error.dart';
 
 class ClientHttp {
+  static User? _user;
   final Dio dio;
   ClientHttp(this.dio);
 
@@ -14,6 +16,8 @@ class ClientHttp {
     final response = await dio
         .get(path, queryParameters: params, options: option)
         .catchError((error) => _onError(error));
+    response.data['user'] = _user?.toJson();
+    response.data['user_id'] = _user?.id;
     return response;
   }
 
@@ -25,6 +29,8 @@ class ClientHttp {
     final response = await dio
         .post(path, data: body, queryParameters: params, options: option)
         .catchError((error) => _onError(error));
+    response.data['user'] = _user?.toJson();
+    response.data['user_id'] = _user?.id;
     return response;
   }
 
@@ -36,6 +42,8 @@ class ClientHttp {
     final response = await dio
         .patch(path, data: body, queryParameters: params, options: option)
         .catchError((error) => _onError(error));
+    response.data['user'] = _user?.toJson();
+    response.data['user_id'] = _user?.id;
     return response;
   }
 
@@ -47,6 +55,8 @@ class ClientHttp {
     final response = await dio
         .delete(path, data: body, queryParameters: params, options: option)
         .catchError((error) => _onError(error));
+    response.data['user'] = _user?.toJson();
+    response.data['user_id'] = _user?.id;
     return response;
   }
 
@@ -66,5 +76,15 @@ class ClientHttp {
         ...?headers,
       },
     );
+  }
+
+  setToken(User? user, String token) {
+    _user = user;
+    dio.options.headers['Authorization'] = 'Bearer $token';
+    dio.options.headers['X-User-Id'] = user?.id;
+    dio.options.headers['X-User-Email'] = user?.email;
+    dio.options.headers['X-User-Name'] = user?.name;
+    dio.options.headers['X-User-Avatar'] = user?.avatar;
+    dio.options.headers['X-User-Verified'] = user?.verified;
   }
 }
