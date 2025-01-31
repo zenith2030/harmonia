@@ -1,86 +1,85 @@
-import 'package:flutter/material.dart';
+import 'package:harmonia/shareds/client_http.dart';
 import 'package:pocketbase/pocketbase.dart';
 
-class PocketBaseService {
+class PocketBaseApi {
+  static const String baseHttp = 'https://app.solutil.com.br/api/';
   static const String emailSuper = 'sistemaszenith@gmail.com';
   static const String passwordSuper = 'qDgmp@2030';
-  late final PocketBase pb;
-  final String collectionModel;
+  final String collection;
+  final ClientHttp client;
 
-  PocketBaseService(this.collectionModel) {
-    pb = PocketBase('https://solutil.com.br');
-    login(emailSuper, passwordSuper);
-  }
+  PocketBaseApi({
+    required this.collection,
+    required this.client,
+  });
 
-  Future<ResultList<RecordModel>> getAll() async {
+  Future<List<Map<String, dynamic>>> getAll(
+      {Map<String, dynamic>? params}) async {
     try {
-      final result = await pb.collection(collectionModel).getList();
-      return result;
+      final result = await client.get(
+        '$baseHttp$collection/records',
+        params: params,
+      );
+      return result.data;
     } catch (e) {
       if (e is ClientException && e.statusCode == 404) {
-        return ResultList<RecordModel>(
-          items: [],
-          totalItems: 0,
-          page: 0,
-          perPage: 0,
-          totalPages: 0,
-        );
+        return [];
       } else {
         rethrow;
       }
     }
   }
 
-  Future<List<RecordModel>> getByIds(List<String> ids) async {
-    return pb
-        .collection(collectionModel)
-        .getFullList(query: {'id': 'in', 'ids': ids});
-  }
-
-  Future<RecordModel> getById(String id) async {
-    return pb.collection(collectionModel).getOne(id);
-  }
-
-  Future<RecordModel> add(Map<String, dynamic> model) {
-    return pb.collection(collectionModel).create(body: model);
-  }
-
-  Future<RecordModel> update(String id, Map<String, dynamic> model) async {
-    return pb.collection(collectionModel).update(id, body: model);
-  }
-
-  Future<void> delete(String id) {
-    return pb.collection(collectionModel).delete(id);
-  }
-
-  logout() {
-    pb.authStore.clear();
-  }
-
-  Future<bool> isLogged() async {
-    return pb.authStore.isValid;
-  }
-
-  Future<void> login(String email, String password) async {
-    await pb.collection('_superusers').authWithPassword(email, password);
-    //pb.authStore.save(authData.token, authData.record);
-    if (pb.authStore.isValid) {
-      debugPrint('Logged in as Token: ${pb.authStore.token}');
-      debugPrint('Logged in as ID: ${pb.authStore.record?.id}');
+  Future<Map<String, dynamic>> getById(
+    String id, {
+    Map<String, dynamic>? params,
+  }) async {
+    try {
+      final result = await client.get(
+        '$baseHttp$collection/records/$id',
+        params: params,
+      );
+      return result.data;
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<void> register(String email, String password) async {
-    await pb
-        .collection('_superusers')
-        .authWithPassword(emailSuper, passwordSuper);
+  Future<Map<String, dynamic>> create({
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? params,
+  }) async {
+    final result = await client.post(
+      '$baseHttp$collection/records',
+      body: body,
+      params: params,
+    );
+    return result.data;
+  }
 
-    if (pb.authStore.isValid) {
-      await pb.collection('users').create(body: {
-        'email': email,
-        'password': password,
-        'passwordConfirm': password,
-      });
-    }
+  Future<Map<String, dynamic>> update(
+    String id, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? params,
+  }) async {
+    final result = await client.patch(
+      '$baseHttp$collection/records/$id',
+      body: body,
+      params: params,
+    );
+    return result.data;
+  }
+
+  Future<Map<String, dynamic>> delete(
+    String id, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? params,
+  }) async {
+    final result = await client.delete(
+      '$baseHttp$collection/records/$id',
+      body: body,
+      params: params,
+    );
+    return result.data;
   }
 }
