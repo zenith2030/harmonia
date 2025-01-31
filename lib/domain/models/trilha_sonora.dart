@@ -18,7 +18,7 @@ class TrilhaSonora {
       id: json['id'],
       nome: json['nome'],
       imagemUrl: json['imageUrl'],
-      faixas: [],
+      faixas: FaixaMusical.toList(json['faixas']),
     );
   }
 
