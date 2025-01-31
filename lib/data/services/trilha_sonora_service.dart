@@ -1,22 +1,21 @@
-import 'package:harmonia/domain/models/faixa_musical.dart';
 import 'package:harmonia/domain/models/trilha_sonora.dart';
-import '../../shareds/pocketbase_service.dart';
+import 'package:harmonia/shareds/client_http.dart';
+import 'package:harmonia/shareds/pocketbase_api.dart';
 
 class TrilhaSonoraService {
-  final _trilhaService = PocketBaseService('trilha_sonora');
-  final _musicaService = PocketBaseService('musica');
+  final ClientHttp client;
+  late PocketBaseApi _trilhaService;
+//  late PocketBaseApi _musicaService;
+
+  TrilhaSonoraService(this.client) {
+    _trilhaService = PocketBaseApi(collection: 'trilhas', client: client);
+    //  _musicaService = PocketBaseApi(collection: 'musicas', client: client);
+  }
 
   Future<List<TrilhaSonora>> getAll() async {
     try {
       final result = await _trilhaService.getAll();
-      return result.items.map((e) {
-        final item = TrilhaSonora.fromJson(e.data);
-        e.data['faixas'].forEach((id) async {
-          final musica = await _musicaService.getById(id);
-          item.faixas.add(FaixaMusical.fromJson(musica.data));
-        });
-        return item;
-      }).toList();
+      return result.map(TrilhaSonora.fromJson).toList();
     } catch (e) {
       rethrow;
     }
@@ -25,20 +24,20 @@ class TrilhaSonoraService {
   Future<TrilhaSonora> getById(String id) async {
     try {
       final result = await _trilhaService.getById(id);
-      return TrilhaSonora.fromJson(result.data);
+      return TrilhaSonora.fromJson(result);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<TrilhaSonora> add(Map<String, dynamic> model) async {
-    final result = await _trilhaService.add(model);
-    return TrilhaSonora.fromJson(result.data);
+  Future<TrilhaSonora> create(Map<String, dynamic> model) async {
+    final result = await _trilhaService.create(body: model);
+    return TrilhaSonora.fromJson(result);
   }
 
   Future<TrilhaSonora> update(String id, Map<String, dynamic> model) async {
-    final result = await _trilhaService.update(id, model);
-    return TrilhaSonora.fromJson(result.data);
+    final result = await _trilhaService.update(id, body: model);
+    return TrilhaSonora.fromJson(result);
   }
 
   Future<void> delete(String id) async {
