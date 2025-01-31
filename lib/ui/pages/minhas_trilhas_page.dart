@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:harmonia/data/repositories/trilha_sonora_repository.dart';
+import 'package:harmonia/main.dart';
 import 'package:harmonia/ui/pages/add_trilha_sonora.dart';
 import 'package:harmonia/ui/widgets/gradient_background.dart';
 import 'package:harmonia/ui/widgets/progress_widget.dart';
-import 'package:provider/provider.dart';
 
 class MinhasTrilhasPage extends StatefulWidget {
   const MinhasTrilhasPage({super.key});
@@ -15,7 +15,7 @@ class MinhasTrilhasPage extends StatefulWidget {
 class _MinhasTrilhasPageState extends State<MinhasTrilhasPage> {
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<TrilhaSonoraRepository>();
+    final repository = injector.get<TrilhaSonoraRepository>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Minhas Trilhas'),
