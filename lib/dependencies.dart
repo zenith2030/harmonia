@@ -5,7 +5,6 @@ import 'package:harmonia/data/repositories/trilha_sonora_repository.dart';
 import 'package:harmonia/data/services/trilha_sonora_service.dart';
 import 'package:harmonia/main.dart';
 import 'package:harmonia/shareds/client_http.dart';
-import 'package:harmonia/shareds/pocketbase_api.dart';
 
 class Dependencies {
   Dependencies() {
@@ -16,7 +15,6 @@ class Dependencies {
       TrilhaSonoraImplRepository.new,
     );
     injector.addSingleton<TrilhaSonoraService>(TrilhaSonoraService.new);
-    //injector.addSingleton<PocketBaseApi>(PocketBaseApi.new);
     injector.commit();
   }
 }
