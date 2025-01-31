@@ -80,11 +80,21 @@ class ClientHttp {
 
   setToken(User? user, String token) {
     _user = user;
-    dio.options.headers['Authorization'] = 'Bearer $token';
+    dio.options.headers['Authorization'] = '$token';
     dio.options.headers['X-User-Id'] = user?.id;
     dio.options.headers['X-User-Email'] = user?.email;
     dio.options.headers['X-User-Name'] = user?.name;
     dio.options.headers['X-User-Avatar'] = user?.avatar;
     dio.options.headers['X-User-Verified'] = user?.verified;
+  }
+
+  clearToken() {
+    _user = null;
+    dio.options.headers.remove('Authorization');
+    dio.options.headers.remove('X-User-Id');
+    dio.options.headers.remove('X-User-Email');
+    dio.options.headers.remove('X-User-Name');
+    dio.options.headers.remove('X-User-Avatar');
+    dio.options.headers.remove('X-User-Verified');
   }
 }

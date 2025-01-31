@@ -2,10 +2,10 @@ import 'package:harmonia/domain/models/user.dart';
 import 'package:harmonia/shareds/client_http.dart';
 
 class AuthService {
-  static User? user;
+  static User? _user;
   final ClientHttp client;
 
-  static const String baseHttp = 'https://app.solutil.com.br/api';
+  static const String baseHttp = 'https://solutil.com.br/api/collections/users';
   static const String email = 'slproger@gmail.com';
   static const String password = '12345678';
 
@@ -13,17 +13,22 @@ class AuthService {
     login(email, password);
   }
 
-  User? get currentUser => user;
+  User? get currentUser => _user;
 
   Future<void> login(String email, String password) async {
     final result = await client.post(
-      '$baseHttp/users/auth-with-password',
+      '$baseHttp/auth-with-password',
       body: {'identity': email, 'password': password},
     );
-    user = User.fromJson(result.data['record']);
+    _user = User.fromJson(result.data['record']);
     await client.setToken(
-      user,
+      _user,
       result.data['token'],
     );
+  }
+
+  Future<void> logout() async {
+    await client.clearToken();
+    _user = null;
   }
 }
