@@ -9,12 +9,12 @@ import 'package:harmonia/shareds/client_http.dart';
 class Dependencies {
   Dependencies() {
     injector.addInstance<Dio>(Dio());
-    injector.addSingleton<ClientHttp>(ClientHttp.new);
-    injector.addSingleton<AuthService>(AuthService.new);
-    injector.addSingleton<TrilhaSonoraRepository>(
+    injector.addLazySingleton<ClientHttp>(ClientHttp.new);
+    injector.addLazySingleton<AuthService>(AuthService.new);
+    injector.addLazySingleton<TrilhaSonoraRepository>(
       TrilhaSonoraImplRepository.new,
     );
-    injector.addSingleton<TrilhaSonoraService>(TrilhaSonoraService.new);
+    injector.addLazySingleton<TrilhaSonoraService>(TrilhaSonoraService.new);
     injector.commit();
   }
 }

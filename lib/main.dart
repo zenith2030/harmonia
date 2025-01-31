@@ -1,7 +1,9 @@
 import 'package:auto_injector/auto_injector.dart';
 import 'package:flutter/material.dart';
-import 'package:harmonia/dependencies.dart';
-import 'package:harmonia/ui/pages/app_page.dart';
+import 'package:harmonia/ui/auth/pages/login_page.dart';
+import 'package:harmonia/ui/auth/pages/splash_page.dart';
+import 'dependencies.dart';
+import 'ui/pages/app_page.dart';
 
 final injector = AutoInjector();
 void main() {
@@ -29,7 +31,12 @@ class _AppState extends State<App> {
         ),
         useMaterial3: true,
       ),
-      home: const AppPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashPage(),
+        '/home': (context) => const AppPage(),
+        '/login': (context) => const LoginPage(),
+      },
     );
   }
 }

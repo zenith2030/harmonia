@@ -9,9 +9,7 @@ class AuthService {
   static const String email = 'slproger@gmail.com';
   static const String password = '12345678';
 
-  AuthService(this.client) {
-    login(email, password);
-  }
+  AuthService(this.client);
 
   User? get currentUser => _user;
 

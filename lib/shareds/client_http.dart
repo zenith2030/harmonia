@@ -80,7 +80,7 @@ class ClientHttp {
 
   setToken(User? user, String token) {
     _user = user;
-    dio.options.headers['Authorization'] = '$token';
+    dio.options.headers['Authorization'] = token;
     dio.options.headers['X-User-Id'] = user?.id;
     dio.options.headers['X-User-Email'] = user?.email;
     dio.options.headers['X-User-Name'] = user?.name;
