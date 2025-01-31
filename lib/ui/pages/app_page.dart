@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:harmonia/main.dart';
 import 'package:harmonia/ui/widgets/bottom_navigation.dart';
-import 'package:provider/provider.dart';
 import '../../data/repositories/trilha_sonora_repository.dart';
 import 'player_page.dart';
 import 'minhas_trilhas_page.dart';
@@ -21,7 +21,7 @@ class AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    repository = context.read<TrilhaSonoraRepository>();
+    repository = injector.get<TrilhaSonoraRepository>();
 
     _tabs = [
       TabItem(
