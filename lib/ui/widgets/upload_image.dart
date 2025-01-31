@@ -8,10 +8,10 @@ class UploadImage extends StatefulWidget {
   const UploadImage({super.key});
 
   @override
-  _UploadImageState createState() => _UploadImageState();
+  UploadImageState createState() => UploadImageState();
 }
 
-class _UploadImageState extends State<UploadImage> {
+class UploadImageState extends State<UploadImage> {
   File? _image;
   final _picker = ImagePicker();
 
@@ -47,6 +47,7 @@ class _UploadImageState extends State<UploadImage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.hardEdge,
       padding: const EdgeInsets.all(2.0),
       width: 60,
       height: 60,
