@@ -2,15 +2,15 @@ import 'package:harmonia/shareds/client_http.dart';
 
 class PocketBaseApi {
   static const String baseHttp = 'https://app.solutil.com.br/api/';
-  static const String emailSuper = 'sistemaszenith@gmail.com';
-  static const String passwordSuper = 'qDgmp@2030';
   final String collection;
   final ClientHttp client;
 
   PocketBaseApi({
     required this.collection,
     required this.client,
-  });
+  }) {
+    client.post('$baseHttp$collection/records', params: {'sort': '-created'});
+  }
 
   Future<List<Map<String, dynamic>>> getAll(
       {Map<String, dynamic>? params}) async {
