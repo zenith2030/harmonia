@@ -28,7 +28,7 @@ class TrilhaSonoraImplRepository implements TrilhaSonoraRepository {
   @override
   Future<TrilhaSonora> addTrilha(TrilhaSonoraCreate trilha) async {
     try {
-      final trilhaModel = await _trilhaService.add(trilha.toJson());
+      final trilhaModel = await _trilhaService.create(trilha.toJson());
       _trilhas.add(trilhaModel);
       return trilhaModel;
     } catch (e) {
