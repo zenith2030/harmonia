@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:harmonia/data/auth/auth_service.dart';
-import 'package:harmonia/data/auth/login_dto.dart';
-import 'package:harmonia/data/auth/login_validator.dart';
-import 'package:harmonia/main.dart';
+import 'package:harmonia/app/dependencies.dart';
+import 'package:harmonia/auth/data/dtos/credentials.dart';
+import 'package:harmonia/auth/data/validators/credentials_validator.dart';
+import 'package:harmonia/ui/auth/viewmodels/login_viewmodel.dart';
 import 'package:harmonia/ui/auth/widgets/app_logo.dart';
-import 'package:harmonia/ui/widgets/gradient_background.dart';
-import 'package:result_dart/result_dart.dart';
+import 'package:harmonia/ui/auth/widgets/custom_text_form_field.dart';
+import 'package:harmonia/ui/player/widgets/gradient_background.dart';
+import 'package:result_command/result_command.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,77 +16,137 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final auth = injector.get<AuthService>();
-  final login = LoginDto.empty();
+  final viewModel = injector.get<LoginViewmodel>();
+  final credentials = Credentials.empty();
+  final validator = CredentialsValidator();
   final formKey = GlobalKey<FormState>();
-  final validator = LoginValidator();
+
+  @override
+  initState() {
+    super.initState();
+    viewModel.logincommand.addListener(_listenable);
+  }
+
+  _listenable() {
+    if (viewModel.logincommand.isFailure) {
+      final failure = viewModel.logincommand.value as FailureCommand;
+      final snacker = SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(failure.error.toString()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snacker);
+    }
+  }
+
+  @override
+  dispose() {
+    viewModel.logincommand.removeListener(_listenable);
+    super.dispose();
+  }
+
+  validLogin() async {
+    if (formKey.currentState!.validate()) {
+      viewModel.logincommand.execute(credentials);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: GradientBackground(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
+        body: GradientBackground(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(height: 20.0),
                   AppLogo(size: 200.0),
-                  SizedBox(height: 16.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                    ),
-                    onChanged: (value) => login.email = value,
+                  SizedBox(height: 20.0),
+                  CustomTextFormField(
+                    label: 'Email',
+                    onChanged: credentials.setEmail,
+                    validator: validator.byField(credentials, 'email'),
                     keyboardType: TextInputType.emailAddress,
-                    validator: validator.byField(login, 'email'),
                   ),
-                  const SizedBox(height: 16.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    decoration: InputDecoration(
-                      labelText: 'Senha',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                    ),
-                    onChanged: (value) => login.password = value,
+                  SizedBox(height: 16.0),
+                  CustomTextFormField(
+                    label: 'Senha',
+                    onChanged: credentials.setPassword,
+                    validator: validator.byField(credentials, 'password'),
                     obscureText: true,
-                    validator: validator.byField(login, 'password'),
                   ),
                   const SizedBox(height: 16.0),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 60,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          final result =
-                              auth.login(login.email, login.password);
-                          result.fold(
-                            (failure) =>
-                                ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(failure.toString())),
-                            ),
-                            (user) =>
-                                Navigator.of(context).pushReplacementNamed(
-                              '/home',
-                            ),
-                          );
-                        }
-                      },
-                      child: Text('Login'),
-                    ),
+                  ListenableBuilder(
+                    listenable: viewModel.logincommand,
+                    builder: (context, _) {
+                      print(viewModel.logincommand.value);
+                      return CustomButton(
+                        onPressed: viewModel.logincommand.isRunning
+                            ? null
+                            : validLogin,
+                        child: (viewModel.logincommand.isRunning)
+                            ? const CircularProgressIndicator()
+                            : const Text('Entrar'),
+                      );
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('/register'),
+                        child: const Text('Criar uma conta'),
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('/forgot-password'),
+                        child: const Text('Esqueci a senha'),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  const CustomButton({
+    super.key,
+    this.onPressed,
+    this.child,
+    this.heightSize = 55.0,
+    this.widthSize = double.infinity,
+    this.colorButton,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget? child;
+  final double heightSize;
+  final double widthSize;
+  final Color? colorButton;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeColors = Theme.of(context).colorScheme;
+    final color = colorButton ?? themeColors.primaryContainer;
+    return SizedBox(
+      height: heightSize,
+      width: widthSize,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(color),
+        ),
+        onPressed: onPressed,
+        child: child,
       ),
     );
   }

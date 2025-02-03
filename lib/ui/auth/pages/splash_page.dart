@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:harmonia/data/auth/auth_service.dart';
-import 'package:harmonia/main.dart';
+import 'package:harmonia/app/app_viewmodel.dart';
+import 'package:harmonia/app/dependencies.dart';
 import 'package:harmonia/ui/auth/widgets/app_logo.dart';
-import 'package:harmonia/ui/widgets/gradient_background.dart';
+import 'package:harmonia/ui/player/widgets/gradient_background.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -11,28 +11,30 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage>
-    with SingleTickerProviderStateMixin {
-  final auth = injector.get<AuthService>();
-
-  late AnimationController _controller;
+class _SplashPageState extends State<SplashPage> {
+  final appViewModel = injector.get<AppViewModel>();
 
   @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    );
-    _controller.forward();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(Duration(seconds: 3), () {});
-      if (auth.currentUser != null) {
-        Navigator.of(context).pushReplacementNamed('/app');
-      } else {
-        Navigator.of(context).pushReplacementNamed('/login');
-      }
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appViewModel.addListener(listener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      listener();
     });
+  }
+
+  void listener() {
+    if (appViewModel.user != null) {
+      Navigator.of(context).pushNamed('/home');
+    } else {
+      Navigator.of(context).pushNamed('/login');
+    }
+  }
+
+  @override
+  void dispose() {
+    appViewModel.removeListener(listener);
+    super.dispose();
   }
 
   @override
