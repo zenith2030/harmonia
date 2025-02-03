@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:harmonia/auth/domain/entities/user.dart';
+import 'package:harmonia/auth/domain/entities/logged_user.dart';
 
 class ClientHttp {
-  static User? _user;
+  static LoggedUser? _user;
   Dio dio = Dio();
   ClientHttp(this.dio);
 
@@ -96,9 +96,9 @@ class ClientHttp {
     return response;
   }
 
-  setToken(User? user, String token) {
+  setToken(LoggedUser? user) {
     _user = user;
-    dio.options.headers['Authorization'] = token;
+    dio.options.headers['Authorization'] = user?.token;
     dio.options.headers['X-User-Id'] = user?.id;
     dio.options.headers['X-User-Email'] = user?.email;
     dio.options.headers['X-User-Name'] = user?.name;

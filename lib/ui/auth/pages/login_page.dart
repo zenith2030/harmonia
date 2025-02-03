@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:harmonia/app/dependencies.dart';
-import 'package:harmonia/auth/data/dtos/credentials.dart';
-import 'package:harmonia/auth/data/validators/credentials_validator.dart';
+import 'package:harmonia/auth/domain/dtos/credentials.dart';
+import 'package:harmonia/auth/domain/validators/credentials_validator.dart';
 import 'package:harmonia/ui/auth/viewmodels/login_viewmodel.dart';
 import 'package:harmonia/ui/auth/widgets/app_logo.dart';
 import 'package:harmonia/ui/auth/widgets/custom_text_form_field.dart';
@@ -82,7 +82,8 @@ class _LoginPageState extends State<LoginPage> {
                   ListenableBuilder(
                     listenable: viewModel.logincommand,
                     builder: (context, _) {
-                      print(viewModel.logincommand.value);
+                      debugPrint(viewModel.logincommand.value.toString());
+                      //debugPrint(formKey.currentState!.validate().toString());
                       return CustomButton(
                         onPressed: viewModel.logincommand.isRunning
                             ? null

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:harmonia/app/dependencies.dart';
-import 'package:harmonia/auth/data/repositories/auth_repository.dart';
-import 'package:harmonia/auth/data/dtos/register_user.dart';
-import 'package:harmonia/auth/data/validators/register_user_validator.dart';
+import 'package:harmonia/auth/domain/dtos/register_user.dart';
+import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
+import 'package:harmonia/auth/domain/validators/register_user_validator.dart';
 import 'package:harmonia/ui/player/widgets/gradient_background.dart';
 import 'package:harmonia/ui/auth/widgets/custom_text_form_field.dart';
 
@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
             backgroundColor: Colors.green,
             content: Text('Usuário registrado com sucesso!'),
           ));
-          Navigator.of(context).pushReplacementNamed('/login');
+          Navigator.of(context).pop();
         },
         (failure) => ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

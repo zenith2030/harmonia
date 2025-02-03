@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:harmonia/auth/data/repositories/auth_repository.dart';
-import 'package:harmonia/auth/domain/entities/user.dart';
+import 'package:harmonia/auth/domain/entities/logged_user.dart';
+import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
 
 class AppViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
 
-  User? _user;
-  User? get user => _user;
+  LoggedUser? _user;
+  LoggedUser? get user => _user;
 
   AppViewModel(this._authRepository) {
     _authRepository.userObserve.listen((user) {

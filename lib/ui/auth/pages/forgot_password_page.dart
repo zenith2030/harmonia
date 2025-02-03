@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:harmonia/app/dependencies.dart';
-import 'package:harmonia/auth/data/dtos/credentials.dart';
-import 'package:harmonia/auth/data/repositories/auth_repository.dart';
-import 'package:harmonia/auth/data/validators/credentials_validator.dart';
+import 'package:harmonia/auth/domain/dtos/credentials.dart';
+import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
+import 'package:harmonia/auth/domain/validators/credentials_validator.dart';
 import 'package:harmonia/ui/auth/widgets/custom_text_form_field.dart';
 import 'package:harmonia/ui/player/widgets/gradient_background.dart';
 

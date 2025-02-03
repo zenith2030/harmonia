@@ -1,4 +1,4 @@
-import 'package:harmonia/auth/data/dtos/register_user.dart';
+import 'package:harmonia/auth/domain/dtos/register_user.dart';
 import 'package:lucid_validation/lucid_validation.dart';
 
 class RegisterUserValidator extends LucidValidator<RegisterUser> {

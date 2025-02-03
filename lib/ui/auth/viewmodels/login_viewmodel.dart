@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:harmonia/auth/data/dtos/credentials.dart';
-import 'package:harmonia/auth/domain/entities/user.dart';
+import 'package:harmonia/auth/domain/dtos/credentials.dart';
+import 'package:harmonia/auth/domain/entities/logged_user.dart';
+import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
 import 'package:result_command/result_command.dart';
 import 'package:result_dart/result_dart.dart';
-
-import '../../../auth/data/repositories/auth_repository.dart';
 
 class LoginViewmodel extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -13,7 +12,7 @@ class LoginViewmodel extends ChangeNotifier {
 
   late final logincommand = Command1(_login);
 
-  AsyncResult<User> _login(Credentials credentials) {
+  AsyncResult<LoggedUser> _login(Credentials credentials) {
     return _authRepository.login(credentials);
   }
 }

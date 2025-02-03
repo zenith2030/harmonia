@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:harmonia/app/app.dart';
 import 'package:harmonia/app/dependencies.dart';
-import 'package:harmonia/auth/data/repositories/auth_repository.dart';
+import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
 import 'package:harmonia/ui/player/widgets/gradient_background.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -13,7 +13,10 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Configurações'),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.person)),
+          IconButton(
+            onPressed: () => Navigator.pushNamed(context, '/profile'),
+            icon: Icon(Icons.person),
+          ),
         ],
       ),
       body: GradientBackground(
@@ -34,8 +37,7 @@ class SettingsPage extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.music_note),
-                title: Text('Musicas'),
-                trailing: Icon(Icons.arrow_forward_ios),
+                title: Text('Player'),
               ),
               ListTile(
                 leading: Icon(Icons.logout),

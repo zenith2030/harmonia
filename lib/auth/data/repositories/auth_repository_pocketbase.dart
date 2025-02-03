@@ -1,27 +1,30 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:harmonia/auth/data/dtos/credentials.dart';
-import 'package:harmonia/auth/data/dtos/register_user.dart';
+import 'package:harmonia/auth/domain/dtos/credentials.dart';
+import 'package:harmonia/auth/domain/dtos/register_user.dart';
+import 'package:harmonia/auth/domain/entities/logged_user.dart';
 import 'package:harmonia/auth/domain/entities/user.dart';
+import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
 import 'package:harmonia/errors/http_error.dart';
 import 'package:harmonia/shareds/client_http.dart';
 import 'package:result_dart/result_dart.dart';
 
-class AuthRepository {
+class AuthRepositoryPocketbase implements AuthRepository {
   static const String baseHttp = 'https://solutil.com.br/api/collections/users';
 
-  User? _user;
-  User? get currentUser => _user;
+  LoggedUser? _loggedUser;
+  LoggedUser? get currentUser => _loggedUser;
 
   final ClientHttp client;
 
-  AuthRepository(this.client);
+  AuthRepositoryPocketbase(this.client);
 
-  final _streamController = StreamController<User?>();
-  Stream<User?> get userObserve => _streamController.stream;
+  final _streamController = StreamController<LoggedUser?>();
+  Stream<LoggedUser?> get userObserve => _streamController.stream;
 
-  AsyncResult<User> login(Credentials credentials) async {
+  @override
+  AsyncResult<LoggedUser> login(Credentials credentials) async {
     try {
       final result = await client.post(
         '$baseHttp/auth-with-password',
@@ -31,11 +34,16 @@ class AuthRepository {
         },
       );
       if (result.statusCode == 200) {
-        _user = User.fromJson((result.data['record'] as Map<String, dynamic>));
-        final token = (result.data as Map<String, dynamic>)['token'];
-        await client.setToken(_user, token);
-        _streamController.add(_user);
-        return Success(_user!);
+        final data = result.data as Map<String, dynamic>;
+        final logged = LoggedUser.fromJson(data['record']);
+        _loggedUser = logged.copyWith({
+          'token': data['token'] ?? '',
+          'refreshToken': data['refreshToken'] ?? '',
+        });
+
+        await client.setToken(_loggedUser);
+        _streamController.add(_loggedUser);
+        return Success(_loggedUser!);
       } else {
         final message = (result.data as Map<String, dynamic>)['message'];
         return Failure(LoginError(message: message));
@@ -46,6 +54,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncResult<User> register(RegisterUser user) async {
     try {
       final result = await client.post('$baseHttp/records?fields=*', body: {
@@ -66,6 +75,7 @@ class AuthRepository {
     }
   }
 
+  @override
   AsyncResult<void> requestPasswordReset(String email) async {
     try {
       final result = await client.post(
@@ -84,9 +94,16 @@ class AuthRepository {
     }
   }
 
-  Future<void> logout() async {
-    await client.clearToken();
-    _user = null;
-    _streamController.add(null);
+  @override
+  AsyncResult<Unit> logout() async {
+    try {
+      await client.clearToken();
+      _loggedUser = null;
+      _streamController.add(null);
+      return Success(unit);
+    } catch (e) {
+      log(e.toString());
+      return Failure(LoginError(message: 'Erro ao realizar logout'));
+    }
   }
 }

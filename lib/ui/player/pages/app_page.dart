@@ -4,7 +4,7 @@ import '../widgets/bottom_navigation.dart';
 import '../../../player/data/repositories/trilha_sonora_repository.dart';
 import 'player_page.dart';
 import 'minhas_trilhas_page.dart';
-import 'settings_page.dart';
+import '../../settings/pages/settings_page.dart';
 
 class AppPage extends StatefulWidget {
   const AppPage({super.key});

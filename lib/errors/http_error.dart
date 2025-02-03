@@ -25,3 +25,10 @@ class LoginError extends AppFailure {
     StackTrace? stackTrace,
   }) : super(message, stackTrace);
 }
+
+class LocalStorageError extends AppFailure {
+  LocalStorageError({
+    required String message,
+    StackTrace? stackTrace,
+  }) : super(message, stackTrace);
+}
