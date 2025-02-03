@@ -21,6 +21,7 @@ class AuthRepositoryPocketbase implements AuthRepository {
   AuthRepositoryPocketbase(this.client);
 
   final _streamController = StreamController<LoggedUser?>();
+  @override
   Stream<LoggedUser?> get userObserve => _streamController.stream;
 
   @override
