@@ -39,6 +39,7 @@ class LoggedUser extends User {
     };
   }
 
+  @override
   LoggedUser copyWith(Map<String, dynamic> model) {
     return LoggedUser(
       id: model['id'] ?? id,
