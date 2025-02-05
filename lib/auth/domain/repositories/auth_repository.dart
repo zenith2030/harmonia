@@ -10,4 +10,6 @@ abstract class AuthRepository {
   AsyncResult<void> requestPasswordReset(String email);
   AsyncResult<void> logout();
   Stream<LoggedUser?> get userObserve;
+  LoggedUser? get currentUser;
+  AsyncResult<Unit> loadSavedUser();
 }

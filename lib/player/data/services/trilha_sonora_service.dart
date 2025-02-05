@@ -1,6 +1,6 @@
 import 'package:harmonia/player/domain/models/trilha_sonora.dart';
-import 'package:harmonia/shareds/client_http.dart';
-import 'package:harmonia/shareds/pocketbase_api.dart';
+import 'package:harmonia/shareds/services/client_http.dart';
+import 'package:harmonia/shareds/services/pocketbase_api.dart';
 
 class TrilhaSonoraService {
   final ClientHttp client;

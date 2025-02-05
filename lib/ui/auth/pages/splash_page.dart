@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:harmonia/app/app_viewmodel.dart';
-import 'package:harmonia/app/dependencies.dart';
-import 'package:harmonia/ui/auth/widgets/app_logo.dart';
+import 'package:harmonia/shareds/widgets/app_logo.dart';
 import 'package:harmonia/ui/player/widgets/gradient_background.dart';
+import 'package:harmonia/ui/auth/viewmodels/splash_viewmodel.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  final SplashViewmodel _splashViewmodel;
+
+  const SplashPage({super.key, required SplashViewmodel splashViewmodel})
+      : _splashViewmodel = splashViewmodel;
 
   @override
   State<SplashPage> createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final appViewModel = injector.get<AppViewModel>();
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    appViewModel.addListener(listener);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      listener();
+  void initState() {
+    super.initState();
+    widget._splashViewmodel.addListener(() {
+      if (widget._splashViewmodel.isLogged) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        Navigator.pushNamed(context, '/login');
+      }
     });
-  }
-
-  void listener() {
-    if (appViewModel.user != null) {
-      Navigator.of(context).pushNamed('/home');
-    } else {
-      Navigator.of(context).pushNamed('/login');
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget._splashViewmodel.init();
+    });
   }
 
   @override
   void dispose() {
-    appViewModel.removeListener(listener);
+    widget._splashViewmodel.removeListener(() {});
     super.dispose();
   }
 

@@ -3,8 +3,11 @@ import 'package:harmonia/app/dependencies.dart';
 import 'package:harmonia/auth/domain/dtos/register_user.dart';
 import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
 import 'package:harmonia/auth/domain/validators/register_user_validator.dart';
+import 'package:harmonia/shareds/widgets/app_logo.dart';
+import 'package:harmonia/shareds/widgets/custom_button.dart';
 import 'package:harmonia/ui/player/widgets/gradient_background.dart';
-import 'package:harmonia/ui/auth/widgets/custom_text_form_field.dart';
+import 'package:harmonia/shareds/widgets/custom_text_form_field.dart';
+import 'package:harmonia/widgets/text_title_button.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -53,6 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  AppLogo(size: 200.0),
                   CustomTextFormField(
                     label: 'Nome',
                     onChanged: (value) => user.name = value ?? '',
@@ -83,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 16.0),
                   CustomButton(
                     onPressed: registrarUser,
-                    child: const Text('Registrar'),
+                    child: const TextTitleButton('Registrar'),
                   ),
                   const SizedBox(height: 4.0),
                 ],
@@ -91,40 +95,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  const CustomButton({
-    super.key,
-    this.onPressed,
-    this.child,
-    this.heightSize = 55.0,
-    this.widthSize = double.infinity,
-    this.colorButton,
-  });
-
-  final VoidCallback? onPressed;
-  final Widget? child;
-  final double heightSize;
-  final double widthSize;
-  final Color? colorButton;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeColors = Theme.of(context).colorScheme;
-    final color = colorButton ?? themeColors.primaryContainer;
-    return SizedBox(
-      height: heightSize,
-      width: widthSize,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(color),
-        ),
-        onPressed: onPressed,
-        child: child,
       ),
     );
   }

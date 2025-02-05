@@ -1,4 +1,4 @@
-import 'package:harmonia/shareds/client_http.dart';
+import 'package:harmonia/shareds/services/client_http.dart';
 
 class PocketBaseApi {
   static const String baseHttp = 'https://app.solutil.com.br/api/';

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:harmonia/app/dependencies.dart';
 import 'package:harmonia/ui/auth/pages/forgot_password_page.dart';
 import 'package:harmonia/ui/auth/pages/login_page.dart';
 import 'package:harmonia/ui/auth/pages/register_page.dart';
 import 'package:harmonia/ui/auth/pages/splash_page.dart';
+import 'package:harmonia/ui/auth/viewmodels/splash_viewmodel.dart';
 import 'package:harmonia/ui/player/pages/app_page.dart';
 
 class App extends StatefulWidget {
@@ -12,7 +14,7 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> with SingleTickerProviderStateMixin {
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +29,9 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashPage(),
+        '/': (context) => SplashPage(
+              splashViewmodel: injector.get<SplashViewmodel>(),
+            ),
         '/home': (context) => const AppPage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),

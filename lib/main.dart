@@ -5,5 +5,5 @@ import 'app/dependencies.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupDependencies();
-  runApp(MaterialApp(home: const App()));
+  runApp(App());
 }

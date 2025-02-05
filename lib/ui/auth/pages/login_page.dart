@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:harmonia/app/dependencies.dart';
 import 'package:harmonia/auth/domain/dtos/credentials.dart';
 import 'package:harmonia/auth/domain/validators/credentials_validator.dart';
+import 'package:harmonia/shareds/widgets/custom_button.dart';
 import 'package:harmonia/ui/auth/viewmodels/login_viewmodel.dart';
-import 'package:harmonia/ui/auth/widgets/app_logo.dart';
-import 'package:harmonia/ui/auth/widgets/custom_text_form_field.dart';
+import 'package:harmonia/shareds/widgets/app_logo.dart';
+import 'package:harmonia/shareds/widgets/custom_text_form_field.dart';
 import 'package:harmonia/ui/player/widgets/gradient_background.dart';
+import 'package:harmonia/widgets/text_title_button.dart';
 import 'package:result_command/result_command.dart';
 
 class LoginPage extends StatefulWidget {
@@ -59,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             key: formKey,
             child: SingleChildScrollView(
+              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -82,15 +85,13 @@ class _LoginPageState extends State<LoginPage> {
                   ListenableBuilder(
                     listenable: viewModel.logincommand,
                     builder: (context, _) {
-                      debugPrint(viewModel.logincommand.value.toString());
-                      //debugPrint(formKey.currentState!.validate().toString());
                       return CustomButton(
                         onPressed: viewModel.logincommand.isRunning
                             ? null
                             : validLogin,
                         child: (viewModel.logincommand.isRunning)
                             ? const CircularProgressIndicator()
-                            : const Text('Entrar'),
+                            : const TextTitleButton('Entrar'),
                       );
                     },
                   ),
@@ -100,12 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                       TextButton(
                         onPressed: () =>
                             Navigator.of(context).pushNamed('/register'),
-                        child: const Text('Criar uma conta'),
+                        child: const TextTitleButton('Criar uma conta'),
                       ),
                       TextButton(
                         onPressed: () =>
                             Navigator.of(context).pushNamed('/forgot-password'),
-                        child: const Text('Esqueci a senha'),
+                        child: const TextTitleButton('Esqueci a senha'),
                       ),
                     ],
                   ),
@@ -114,40 +115,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  const CustomButton({
-    super.key,
-    this.onPressed,
-    this.child,
-    this.heightSize = 55.0,
-    this.widthSize = double.infinity,
-    this.colorButton,
-  });
-
-  final VoidCallback? onPressed;
-  final Widget? child;
-  final double heightSize;
-  final double widthSize;
-  final Color? colorButton;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeColors = Theme.of(context).colorScheme;
-    final color = colorButton ?? themeColors.primaryContainer;
-    return SizedBox(
-      height: heightSize,
-      width: widthSize,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(color),
-        ),
-        onPressed: onPressed,
-        child: child,
       ),
     );
   }
