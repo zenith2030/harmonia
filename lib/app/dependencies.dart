@@ -17,12 +17,17 @@ void setupDependencies() {
   injector.addSingleton(LocalStorage.new);
   injector.addLazySingleton(ClientHttp.new);
   injector.addLazySingleton<AuthRepository>(AuthRepositoryPocketbase.new);
-  injector.addLazySingleton<TrilhaSonoraRepository>(
-    TrilhaSonoraImplRepository.new,
-  );
+  injector
+      .addLazySingleton<TrilhaSonoraRepository>(TrilhaSonoraImplRepository.new);
   injector.addLazySingleton(TrilhaSonoraService.new);
 
   injector.addSingleton(LoginViewmodel.new);
   injector.addSingleton(SplashViewmodel.new);
   injector.commit();
+}
+
+carregarMusicas() async {
+  await Future.delayed(Duration(seconds: 2), () {
+    //injector.get<TrilhaSonoraRepository>().carregarMusicas();
+  });
 }

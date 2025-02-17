@@ -7,21 +7,24 @@ import 'minhas_trilhas_page.dart';
 import '../../settings/pages/settings_page.dart';
 
 class AppPage extends StatefulWidget {
-  const AppPage({super.key});
+  const AppPage({super.key, this.page = 1});
+
+  final int? page;
 
   @override
   State<AppPage> createState() => AppPageState();
 }
 
 class AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
-  static int selectedIndex = 1;
   late List<TabItem> _tabs;
   late TrilhaSonoraRepository repository;
+  static int selectedIndex = 1;
 
   @override
   void initState() {
     super.initState();
     repository = injector.get<TrilhaSonoraRepository>();
+    selectedIndex = widget.page ?? 1;
 
     _tabs = [
       TabItem(

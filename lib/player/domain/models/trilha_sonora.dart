@@ -16,9 +16,9 @@ class TrilhaSonora {
   factory TrilhaSonora.fromJson(Map<String, dynamic> json) {
     return TrilhaSonora(
       id: json['id'],
-      nome: json['nome'],
-      imagemUrl: json['imageUrl'],
-      faixas: FaixaMusical.toList(json['faixas']),
+      nome: json['nome'] ?? '',
+      imagemUrl: json['imageUrl'] ?? '',
+      faixas: FaixaMusical.toList(json['faixas'] ?? []),
     );
   }
 

@@ -4,17 +4,15 @@ import 'package:harmonia/shareds/services/pocketbase_api.dart';
 
 class TrilhaSonoraService {
   final ClientHttp client;
-  late PocketBaseApi _trilhaService;
-//  late PocketBaseApi _musicaService;
+  final PocketBaseApi _trilhaService;
 
-  TrilhaSonoraService(this.client) {
-    _trilhaService = PocketBaseApi(collection: 'trilhas', client: client);
-    //  _musicaService = PocketBaseApi(collection: 'musicas', client: client);
-  }
+  TrilhaSonoraService(this.client)
+      : _trilhaService =
+            PocketBaseApi(collection: 'trilha_sonora', client: client);
 
   Future<List<TrilhaSonora>> getAll() async {
     try {
-      final result = await _trilhaService.getAll();
+      List<Map<String, dynamic>> result = await _trilhaService.getAll();
       return result.map(TrilhaSonora.fromJson).toList();
     } catch (e) {
       rethrow;

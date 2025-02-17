@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:harmonia/app/dependencies.dart';
+import 'package:harmonia/app/routes.dart';
 import 'package:harmonia/auth/domain/dtos/credentials.dart';
 import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
 import 'package:harmonia/auth/domain/validators/credentials_validator.dart';
@@ -25,7 +27,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (formKey.currentState!.validate()) {
       final result = await auth.requestPasswordReset(credential.email);
       result.fold(
-        (user) => Navigator.of(context).pushReplacementNamed('/login'),
+        (user) => context.canPop() ? context.pop() : context.go(Routes.login),
         (failure) => ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(failure.toString()),
@@ -41,7 +43,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Recuperar senha')),
         body: GradientBackground(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Form(
             key: formKey,
             child: SingleChildScrollView(

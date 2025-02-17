@@ -47,74 +47,77 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
     double sizeMiddle = MediaQuery.sizeOf(context).shortestSide * 0.5;
     return Scaffold(
       body: GradientBackground(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SlideTransition(
-              position: playerPageAnimation,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: sizeMiddle,
-                    width: sizeMiddle,
-                    decoration: BoxDecoration(
-                      border: Border.all(
+        padding: EdgeInsets.zero,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SlideTransition(
+                position: playerPageAnimation,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: sizeMiddle,
+                      width: sizeMiddle,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white70,
+                          width: 5.0,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.music_note,
+                        size: sizeMiddle * 0.5,
                         color: Colors.white70,
-                        width: 5.0,
                       ),
                     ),
-                    child: Icon(
-                      Icons.music_note,
-                      size: sizeMiddle * 0.5,
-                      color: Colors.white70,
+                    Row(
+                      spacing: 22.0,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          color: listEnable ? Colors.red : Colors.white,
+                          icon: listEnable
+                              ? Icon(Icons.list_outlined, size: 36.0)
+                              : Icon(Icons.list, size: 30.0),
+                          onPressed: () {
+                            listEnable = !listEnable;
+                            setState(() {});
+                            switch (animateController.status) {
+                              case AnimationStatus.dismissed:
+                                animateController.forward();
+                                break;
+                              case AnimationStatus.completed:
+                                animateController.reverse();
+                                break;
+                              case AnimationStatus.forward:
+                              case AnimationStatus.reverse:
+                                break;
+                            }
+                          },
+                        ),
+                        IconButton(
+                          color: Colors.white,
+                          icon: const Icon(Icons.play_arrow, size: 30.0),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          color: Colors.white,
+                          icon: const Icon(Icons.volume_up, size: 30.0),
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
-                  ),
-                  Row(
-                    spacing: 22.0,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        color: listEnable ? Colors.red : Colors.white,
-                        icon: listEnable
-                            ? Icon(Icons.list_outlined, size: 36.0)
-                            : Icon(Icons.list, size: 30.0),
-                        onPressed: () {
-                          listEnable = !listEnable;
-                          setState(() {});
-                          switch (animateController.status) {
-                            case AnimationStatus.dismissed:
-                              animateController.forward();
-                              break;
-                            case AnimationStatus.completed:
-                              animateController.reverse();
-                              break;
-                            case AnimationStatus.forward:
-                            case AnimationStatus.reverse:
-                              break;
-                          }
-                        },
-                      ),
-                      IconButton(
-                        color: Colors.white,
-                        icon: const Icon(Icons.play_arrow, size: 30.0),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        color: Colors.white,
-                        icon: const Icon(Icons.volume_up, size: 30.0),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SlideTransition(
-              position: listAnimation,
-              child: TrilhasMusicais(repository: repository),
-            ),
-          ],
+              SlideTransition(
+                position: listAnimation,
+                child: TrilhasMusicais(repository: repository),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -134,7 +137,7 @@ class TrilhasMusicais extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 10.0),
       height: MediaQuery.sizeOf(context).height * 0.4,
-      width: MediaQuery.sizeOf(context).shortestSide,
+      width: MediaQuery.sizeOf(context).width,
       decoration: const BoxDecoration(
         color: Colors.white54,
         borderRadius: BorderRadius.vertical(top: Radius.circular(40.0)),

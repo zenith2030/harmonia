@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:harmonia/app/dependencies.dart';
+import 'package:harmonia/app/router.dart';
+import 'package:harmonia/app/routes.dart';
 import 'package:harmonia/auth/domain/dtos/register_user.dart';
 import 'package:harmonia/auth/domain/repositories/auth_repository.dart';
 import 'package:harmonia/auth/domain/validators/register_user_validator.dart';
@@ -31,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
             backgroundColor: Colors.green,
             content: Text('Usuário registrado com sucesso!'),
           ));
-          Navigator.of(context).pop();
+          (nav.canPop()) ? nav.pop() : nav.go(Routes.login);
         },
         (failure) => ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -49,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Registrar')),
         body: GradientBackground(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Form(
             key: formKey,
             child: SingleChildScrollView(

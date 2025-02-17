@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:harmonia/auth/domain/dtos/credentials.dart';
 import 'package:harmonia/auth/domain/dtos/register_user.dart';
 import 'package:harmonia/auth/domain/entities/logged_user.dart';
@@ -12,22 +13,29 @@ import 'package:harmonia/shareds/services/client_http.dart';
 import 'package:harmonia/shareds/services/local_storage.dart';
 import 'package:result_dart/result_dart.dart';
 
-class AuthRepositoryPocketbase implements AuthRepository {
+class AuthRepositoryPocketbase extends ChangeNotifier
+    implements AuthRepository {
   static const String baseHttp = 'https://solutil.com.br/api/collections/users';
   static const String storageKeyLoggedUser = 'loggedUser';
   final ClientHttp client;
   final LocalStorage localStorage;
 
+  @override
   AuthRepositoryPocketbase(this.client, this.localStorage);
 
+  //Estado Privado a serObservado
   LoggedUser? _loggedUser;
+  //Estacia de observação Privada
   final _streamController = StreamController<LoggedUser?>();
-
+  //GET de acesso ao Estado Observado
   @override
   LoggedUser? get currentUser => _loggedUser;
-
+  //GET de acesso à Observação
   @override
   Stream<LoggedUser?> get userObserve => _streamController.stream;
+
+  @override
+  Future<bool> get isAuthenticated async => _loggedUser != null;
 
   @override
   AsyncResult<Unit> loadSavedUser() async {

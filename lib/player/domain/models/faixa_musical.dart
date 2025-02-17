@@ -16,9 +16,9 @@ class FaixaMusical {
   factory FaixaMusical.fromJson(Map<String, dynamic> json) {
     return FaixaMusical(
       id: json['id'],
-      nome: json['nome'],
-      fileUrl: json['fileUrl'],
-      duration: json['duration'],
+      nome: json['nome'] ?? '',
+      fileUrl: json['fileUrl'] ?? '',
+      duration: json['duration'] ?? '',
       options: [],
     );
   }
@@ -37,9 +37,7 @@ class FaixaMusical {
       faixas.map((faixa) => faixa.toJson()).toList();
 
   static List<FaixaMusical> toList(List<Map<String, dynamic>> json) {
-    return json //
-        .map(FaixaMusical.fromJson)
-        .toList();
+    return json.map(FaixaMusical.fromJson).toList();
   }
 }
 

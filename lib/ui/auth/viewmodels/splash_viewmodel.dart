@@ -12,6 +12,7 @@ class SplashViewmodel extends ChangeNotifier {
   final AuthRepository _authRepository;
 
   init() async {
+    debugPrint('SplashViewmodel.init');
     _authRepository.userObserve.listen((user) {
       _user = user;
       notifyListeners();

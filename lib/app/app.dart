@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:harmonia/app/dependencies.dart';
-import 'package:harmonia/ui/auth/pages/forgot_password_page.dart';
-import 'package:harmonia/ui/auth/pages/login_page.dart';
-import 'package:harmonia/ui/auth/pages/register_page.dart';
-import 'package:harmonia/ui/auth/pages/splash_page.dart';
-import 'package:harmonia/ui/auth/viewmodels/splash_viewmodel.dart';
-import 'package:harmonia/ui/player/pages/app_page.dart';
+import 'package:harmonia/app/router.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -17,7 +11,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Mestre de Harmonia',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -27,16 +21,10 @@ class _AppState extends State<App> {
         ),
         useMaterial3: true,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => SplashPage(
-              splashViewmodel: injector.get<SplashViewmodel>(),
-            ),
-        '/home': (context) => const AppPage(),
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/forgot-password': (context) => const ForgotPasswordPage(),
-      },
+      // routerConfig: router(injector.get<AuthRepository>()),
+      routerDelegate: nav.routerDelegate,
+      routeInformationParser: nav.routeInformationParser,
+      routeInformationProvider: nav.routeInformationProvider,
     );
   }
 }

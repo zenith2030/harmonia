@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:harmonia/auth/domain/entities/logged_user.dart';
 
 class ClientHttp {
@@ -12,6 +13,7 @@ class ClientHttp {
     Map<String, dynamic>? params,
   }) async {
     Options option = _options(headers);
+    debugPrint('ClientHttp.get: $path');
     final response = await dio.get(
       path,
       queryParameters: params,
@@ -25,6 +27,7 @@ class ClientHttp {
       Map<String, String>? headers,
       Map<String, dynamic>? params}) async {
     Options option = _options(headers);
+    debugPrint('ClientHttp.post: $path');
     final response = await dio.post(
       path,
       data: body,
@@ -39,6 +42,7 @@ class ClientHttp {
       Map<String, String>? headers,
       Map<String, dynamic>? params}) async {
     Options option = _options(headers);
+    debugPrint('ClientHttp.patch: $path');
     final response = await dio.patch(
       path,
       data: body,
@@ -53,6 +57,7 @@ class ClientHttp {
       Map<String, String>? headers,
       Map<String, dynamic>? params}) async {
     Options option = _options(headers);
+    debugPrint('ClientHttp.delete: $path');
     final response = await dio.delete(
       path,
       data: body,

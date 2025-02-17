@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:harmonia/app/dependencies.dart';
+import 'package:harmonia/app/routes.dart';
 import 'package:harmonia/auth/domain/dtos/credentials.dart';
 import 'package:harmonia/auth/domain/validators/credentials_validator.dart';
 import 'package:harmonia/shareds/widgets/custom_button.dart';
@@ -30,6 +32,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _listenable() {
+    if (viewModel.logincommand.isSuccess) {
+      context.go(Routes.home);
+    }
     if (viewModel.logincommand.isFailure) {
       final failure = viewModel.logincommand.value as FailureCommand;
       final snacker = SnackBar(
@@ -57,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
       child: Scaffold(
         body: GradientBackground(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Form(
             key: formKey,
             child: SingleChildScrollView(
@@ -99,13 +104,11 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed('/register'),
+                        onPressed: () => context.go('/login/register'),
                         child: const TextTitleButton('Criar uma conta'),
                       ),
                       TextButton(
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed('/forgot-password'),
+                        onPressed: () => context.go('/login/forgot-password'),
                         child: const TextTitleButton('Esqueci a senha'),
                       ),
                     ],

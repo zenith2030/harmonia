@@ -43,6 +43,7 @@ dependencies:
   result_dart: ^2.0.0
   result_command: ^1.3.0
   shared_preferences: ^2.2.0
+  go_router: ^14.7.2
 
 dev_dependencies:
   flutter_test:

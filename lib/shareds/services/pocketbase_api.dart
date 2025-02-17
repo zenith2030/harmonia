@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:harmonia/shareds/services/client_http.dart';
 
 class PocketBaseApi {
-  static const String baseHttp = 'https://app.solutil.com.br/api/';
+  static const String baseHttp = 'https://solutil.com.br/api/collections/';
   final String collection;
   final ClientHttp client;
 
@@ -19,7 +20,16 @@ class PocketBaseApi {
         '$baseHttp$collection/records',
         params: params,
       );
-      return result.data;
+      final Map<String, dynamic> data = result.data;
+      final List<Map<String, dynamic>> items = data["items"];
+      debugPrint('PocketBaseApi.getAll: $items');
+      final List<Map<String, dynamic>> lista = [];
+      for (var element in items) {
+        lista.add(element);
+        debugPrint(lista.length.toString());
+        debugPrint('PocketBaseApi.getAll: $element');
+      }
+      return lista;
     } catch (e) {
       rethrow;
     }
